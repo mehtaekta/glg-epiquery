@@ -7,15 +7,21 @@ A promise based [epiquery](https://github.com/glg/epiquery) client based on [blu
  * proxy service middleware layer
  * automatic retry, with progressive back off
  * configurable, increased request timeout
+ 
+ To install, simply use the npm package manager
+ 
+ ```shell
+ npm install --save glg/glg-epiquery
+ ```
 
-## Requests
+## Making Requests
 
 Typically you will simply use the `epiquery()` method to POST a template and optional payload to the server. There are also two convenience methods, `epiquery.get()` and `epiquery.post()` if you prefer. Each of these takes a template path relative to the epiquery server and an optional JSON object as its second parameter. In the case of `get()` the object is interpreted as a list of query string name/value pairs, rather than JSON payload.
 
 ### Typical usage (CoffeeScript)
 
 ```coffee-script
-epiquery = require 'epiquery'
+epiquery = require 'glg-epiquery'
 
 epiquery '/glgCurrentUser/getUserByEmail.mustache',
   email: 'dfields@glgroup.com'
@@ -26,7 +32,7 @@ epiquery '/glgCurrentUser/getUserByEmail.mustache',
 ### Typical usage (JavaScript)
 
 ```javascript
-var epiquery = require('epiquery');
+var epiquery = require('glg-epiquery');
 
 epiquery('/glgCurrentUser/getUserByEmail.mustache', {
   email: 'dfields@glgroup.com'
@@ -52,7 +58,7 @@ If you want to use something different for some reason, you can change these, an
 ### Setting options (CoffeeScript)
 
 ```coffee-script
-epiquery = require 'epiquery',
+epiquery = require 'glg-epiquery',
   server: "http://localhost:8088"
   timeout: 30
 ```
@@ -60,7 +66,7 @@ epiquery = require 'epiquery',
 ### Setting options (JavaScript)
 
 ```javascript
-var epiquery = require('epiquery', {
+var epiquery = require('glg-epiquery', {
   server: "http://localhost:8088",
   timeout: 30
 });
@@ -86,7 +92,7 @@ A middleware service based on [express-request-proxy](https://github.com/4front/
 ### Setting up an epiquery proxy (CoffeeScript)
 
 ```coffee-script
-epiquery = require 'epiquery'
+epiquery = require 'glg-epiquery'
 express = require 'express'
 app = express()
 
@@ -98,7 +104,7 @@ app.listen 8080
 ### Setting up an epiquery proxy (JavaScript)
 
 ```javascript
-var epiquery = require('epiquery');
+var epiquery = require('glg-epiquery');
 var express = require('express');
 var app = express();
 
