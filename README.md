@@ -83,7 +83,7 @@ The `get()` and `post()` methods also accept an options hash as the last argumen
 | password | server password | `EPIQUERY_PASSWORD`|  none                   |
 | retries  | number of times to retry | `EPIQUERY_RETRIES` | 5 |
 | backoff  | progressive delay between retries, in seconds | `EPIQUERY_BACKOFF` | 5|
-| timeout  | request timeout, in seconds | 5 minutes |
+| timeout  | request timeout, in seconds | `EPIQUERY_TIMEOUT` | 5 minutes |
 
 ## Proxy service middleware
 
