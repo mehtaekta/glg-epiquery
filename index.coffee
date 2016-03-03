@@ -13,12 +13,12 @@ Path = require 'path'
 # might need to clone options
 
 defaults =
-  timeout: 1000 * 60 * 5
+  timeout: process.env.EPIQUERY_TIMEOUT ? 1000 * 60 * 5
   server: process.env.EPIQUERY_SERVER ? "http://localhost:7070"
   username: process.env.EPIQUERY_USER ? ""
   password: process.env.EPIQUERY_PASS ? ""
-  retries: 5
-  backoff: 5
+  retries: process.env.EPIQUERY_RETRIES ? 5
+  backoff: process.env.EPIQUERY_BACKOFF ? 5
 
 epiquery = module.exports = (path, json={}, options={}) ->
   # if the first parameter is an object, its options
