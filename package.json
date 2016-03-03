@@ -1,0 +1,26 @@
+{
+  "name": "glg-epiquery",
+  "version": "1.0.0",
+  "description": "epiquery client",
+  "main": "index.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Duane Fields <duane@duanefields.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "3.3.3",
+    "bluebird-retry": "0.5.3",
+    "coffee-script": "1.10.0",
+    "colors": "1.1.2",
+    "debug": "2.2.0",
+    "express": "4.13.4",
+    "express-request-proxy": "1.2.0",
+    "lodash": "4.6.1",
+    "request": "2.69.0"
+  },
+  "bin": {
+    "epiquery": "bin/epiquery.coffee",
+    "proxy": "bin/proxy.coffee"
+  }
+}
