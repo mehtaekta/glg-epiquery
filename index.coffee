@@ -26,7 +26,7 @@ epiquery = module.exports = (path, json={}, options={}) ->
     defaults = _.defaults defaults, options
     debug "defaults now", defaults
   else
-    @post path, json, options
+    epiquery.post path, json, options
 
 epiquery.get = (path, params, options) -> request "GET", path, params, options
 
