@@ -81,8 +81,8 @@ The `get()` and `post()` methods also accept an options hash as the last argumen
 | server   | server url      | `EPIQUERY_SERVER`  | `http://localhost:7070` |
 | username | server username | `EPIQUERY_USER`    |  none                   |
 | password | server password | `EPIQUERY_PASSWORD`|  none                   |
-| retries  | number of times to retry | `EPIQUERY_RETRIES` | 5 |
-| backoff  | progressive delay between retries, in seconds | `EPIQUERY_BACKOFF` | 5|
+| retries  | number of times to retry | `EPIQUERY_RETRIES` | 5 times |
+| backoff  | progressive delay between retries, in seconds | `EPIQUERY_BACKOFF` | 5 seconds |
 | timeout  | request timeout, in seconds | `EPIQUERY_TIMEOUT` | 5 minutes |
 
 ## Proxy service middleware
