@@ -58,7 +58,7 @@ If you want to use something different for some reason, you can change these, an
 ### Setting options (CoffeeScript)
 
 ```coffee-script
-epiquery = require 'glg-epiquery',
+epiquery = require('glg-epiquery')
   server: "http://localhost:8088"
   timeout: 30
 ```
@@ -66,7 +66,7 @@ epiquery = require 'glg-epiquery',
 ### Setting options (JavaScript)
 
 ```javascript
-var epiquery = require('glg-epiquery', {
+epiquery = require('glg-epiquery')({
   server: "http://localhost:8088",
   timeout: 30
 });

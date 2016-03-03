@@ -25,6 +25,7 @@ epiquery = module.exports = (path, json={}, options={}) ->
   if typeof path is 'object'
     defaults = _.defaults defaults, options
     debug "defaults now", defaults
+    epiquery
   else
     epiquery.post path, json, options
 
