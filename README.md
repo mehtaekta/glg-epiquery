@@ -77,7 +77,7 @@ The `get()` and `post()` methods also accept an options hash as the last argumen
 ### Available configuration options
 
 | option   | description     | env variable | default value                 |
-|---------------------------------------------------------------------------|
+|----------|-----------------|--------------|-------------------------------|
 | server   | server url      | `EPIQUERY_SERVER`  | `http://localhost:7070` |
 | username | server username | `EPIQUERY_USER`    |  none                   |
 | password | server password | `EPIQUERY_PASSWORD`|  none                   |
