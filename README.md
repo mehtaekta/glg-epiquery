@@ -89,6 +89,8 @@ The `get()` and `post()` methods also accept an options hash as the last argumen
 
 A middleware service based on [express-request-proxy](https://github.com/4front/express-request-proxy) is provided that makes it to proxy calls from an express server. This makes it simple for your client side apps to talk to epiquery via your service without worrying about passing the configuration or authentication information from server to client. Simply mount the middleware on a local route, and you are good to go with a single line of code. You can pass in configuration options as an optional argument to the `proxy()` call if you need to change anything. There's an [example proxy server](bin/proxy.coffee) in the bin folder.
 
+Note that currently, the proxy does not support all of the same features. Notably, you can't leave off the .mustache extension, and it does not have the same level of logging.
+
 ### Setting up an epiquery proxy (CoffeeScript)
 
 ```coffee-script
