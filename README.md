@@ -1,13 +1,13 @@
 # Epiquery Client
 
-A promise based [epiquery](https://github.com/glg/epiquery) client based on [bluebird](https://github.com/petkaantonov/bluebird/) and [request.js](https://github.com/request/request) that sets everything up for you the way you'd expect and provides some handy conveniences. It uses GLG's starphleet ENV conventions for configuring the server credentials by default, so you probably don't need to do anything else. In addition the epiquery client provides:
+A promise oriented [epiquery](https://github.com/glg/epiquery) client built on [bluebird](https://github.com/petkaantonov/bluebird/) and [request.js](https://github.com/request/request) that sets everything up for you the way you'd expect and provides some handy conveniences. It uses GLG's starphleet ENV conventions for configuring the server credentials by default, so you probably don't need to do anything else. In addition to just working the epiquery client provides:
 
- * integrated [debug](https://github.com/visionmedia/debug) logging
- * a simple command line version
- * proxy service middleware layer
- * automatic retry, with progressive back off
- * configurable, increased request timeout
- 
+  * automatic retry, with progressive back off
+  * integrated [debug](https://github.com/visionmedia/debug) logging
+  * a proxy service middleware for express
+  * configurable, increased request timeout
+  * a simple command line version
+
  To install, simply use the npm package manager
  
  ```shell
@@ -16,7 +16,7 @@ A promise based [epiquery](https://github.com/glg/epiquery) client based on [blu
 
 ## Making Requests
 
-Typically you will simply use the `epiquery()` method to POST a template and optional payload to the server. There are also two convenience methods, `epiquery.get()` and `epiquery.post()` if you prefer. Each of these takes a template path relative to the epiquery server and an optional JSON object as its second parameter. In the case of `get()` the object is interpreted as a list of query string name/value pairs, rather than JSON payload.
+Typically you will simply use the `epiquery()` method to POST a template and optional payload to the server. There are also two convenience methods, `epiquery.get()` and `epiquery.post()` if you prefer to be respectful of REST conventions. Each of these takes a template path relative to the epiquery server and an optional JSON object as its second parameter. In the case of `get()` the object is interpreted as a list of query string name/value pairs, rather than JSON payload.
 
 ### Typical usage (CoffeeScript)
 
@@ -116,12 +116,43 @@ app.listen(8080);
 
 ## Epiquery from the command line
 
-A simple command line version, simply called `epiquery` is provided. It takes a single argument, the template path. Might expand this functionality if it proves useful. There's also a command line version of the `proxy` server functionality.
+A simple command line version, simply called `epiquery` is provided. It takes a single required argument, the template path, an an optional second argument, a JSON payload string. It then pretty prints the JSON results to stdout. I might expand this functionality if it proves useful. There's also a command line version of the `proxy` server functionality.
+
+```shell
+$ bin/epiquery.coffee net-promoter-score/due_for_survey '{"limit":1}'
+
+[
+  {
+    "person_id": 983968,
+    "first_name": "Abhik",
+    "last_name": "Das",
+    "email": ".Cle@rousmorepatted.qux",
+    "salesforce_id": "003U000000i2YEkIAM",
+    "last_activity_date": "2015-12-11T10:27:34.930Z"
+  }
+]
+```
 
 ## Integrated debugging
 
 This library uses the [debug](https://github.com/visionmedia/debug) library to give you some useful debugging feedback, such as tracking request and responses and sampling the return response. To make anything show up you'll need to turn on the `epiquery` debugging via the `DEBUG` ENV variable like this:
 
 ```shell
-export DEBUG=epiquery
+$ export DEBUG=epiquery
+$ bin/epiquery.coffee net-promoter-score/due_for_survey '{"limit":1}'
+
+epiquery POSTing to http://localhost:7070/net-promoter-score/due_for_survey.mustache +0ms { limit: 1 }
+epiquery Received 1 records like these: +398ms
+epiquery { person_id: 983968, first_name: 'Abhik', last_name: 'Das', email: '.Cle@rousmorepatted.qux', salesforce_id: '003U000000i2YEkIAM', last_activity_date: '2015-12-11T10:27:34.930Z' } +1ms
+
+[
+  {
+    "person_id": 983968,
+    "first_name": "Abhik",
+    "last_name": "Das",
+    "email": ".Cle@rousmorepatted.qux",
+    "salesforce_id": "003U000000i2YEkIAM",
+    "last_activity_date": "2015-12-11T10:27:34.930Z"
+  }
+]
 ```

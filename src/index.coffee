@@ -8,6 +8,7 @@ express = require 'express'
 proxy = require 'express-request-proxy'
 router = module.exports = express.Router()
 Path = require 'path'
+querystring = require 'querystring'
 
 # support client side (probaly have to not use request.js)
 # might need to clone options
@@ -44,24 +45,35 @@ sendRequest = (method, path, json={}, options={}) ->
   server = if options.server.slice -1 is '/' then options.server.slice 0, -1 else options.server
   uri = "#{options.server}/#{path}"
 
-  debug "#{method}ing to #{uri}", json
+  requestOptions =
+    uri: uri
+    auth:
+      username: options.username
+      password: options.password
+    method: method
+    timeout: options.timeout
+    json: json
+    gzip: true
+
+  if method is "POST"
+    requestOptions.json = json
+    debug "POSTing to #{uri}", json
+  if method is "GET"
+    requestOptions.json = true
+    requestOptions.qs = json
+    debug "GETing #{uri}?#{querystring.stringify requestOptions.qs}"
+
   retry ->
-    requestAsync
-      uri: uri
-      auth:
-        username: options.username
-        password: options.password
-      method: method
-      timeout: options.timeout
-      json: json
+    requestAsync requestOptions
   , { max_tries: options.retries, backoff: options.backoff }
   .then (response) ->
     if response.statusCode isnt 200
       debug "Unexpected Epiquery Response: ", response.body
       throw new Error "Unexpected HTTP response: #{response.statusCode}"
-    debug "Received #{response.body.length} records like these:"
-    debug _.first response.body
-    response.body
+    results = if typeof response.body is 'string' then JSON.parse resonse.body else response.body
+    debug "Received #{results.length} records like these:"
+    debug _.first results
+    results
 
 epiquery.proxy = (options) ->
   options = _.defaults options, defaults
