@@ -8,11 +8,11 @@ A promise oriented [epiquery](https://github.com/glg/epiquery) client built on [
   * configurable, increased request timeout
   * a simple command line version
 
- To install, simply use the npm package manager
+To install, simply use the npm package manager
  
- ```shell
- npm install --save glg/glg-epiquery
- ```
+```shell
+npm install --save glg/glg-epiquery
+```
 
 ## Making Requests
 
