@@ -21,22 +21,21 @@ defaults =
   backoff: process.env.EPIQUERY_BACKOFF ? 5
   assumeMustache: true
 
+# constructor and main entry point, if the first parameter is an object, its options
 epiquery = module.exports = (pathOrDefaults, json={}, options={}) ->
-  # if the first parameter is an object, its options
   if typeof pathOrDefaults is 'object'
-    defaults = _.defaults defaults, pathOrDefaults
+    defaults = _.defaults pathOrDefaults, defaults
     debug "defaults now", defaults
     epiquery
   else
     epiquery.post pathOrDefaults, json, options
 
-epiquery.get = (path, params, options) -> request "GET", path, params, options
+# verb specific convenience methods
+epiquery.get = (path, params, options) -> sendRequest "GET", path, params, options
+epiquery.post = (path, json, options) -> sendRequest "POST", path, json, options
 
-epiquery.post = (path, json, options) -> request "POST", path, json, options
-    
-request = (method, path, json={}, options={}) ->
-  options = _.defaults defaults, options
-  console.log options
+sendRequest = (method, path, json={}, options={}) ->
+  options = _.defaults options, defaults
   # assume mustache if extension is missing
   path = "#{path}.mustache" if Path.extname(path) is '' and options.assumeMustache
 
@@ -45,7 +44,7 @@ request = (method, path, json={}, options={}) ->
   server = if options.server.slice -1 is '/' then options.server.slice 0, -1 else options.server
   uri = "#{options.server}/#{path}"
 
-  debug "Posting to #{uri}", json
+  debug "#{method}ing to #{uri}", json
   retry ->
     requestAsync
       uri: uri
@@ -65,7 +64,7 @@ request = (method, path, json={}, options={}) ->
     response.body
 
 epiquery.proxy = (options) ->
-  options = _.defaults defaults, options
+  options = _.defaults options, defaults
   router.all '/*', proxy
     url: "#{options.server}/*"
     headers:
@@ -74,4 +73,5 @@ epiquery.proxy = (options) ->
 epiquery.healthcheck = ->
   epiquery "diagnostic", {}, { assumeMustache: false }
   .then (response) ->
-    console.log "Connected to #{defaults.server} for Epiquery"
+    console.log "Successfully connected to #{defaults.server} for Epiquery".blue
+    response
