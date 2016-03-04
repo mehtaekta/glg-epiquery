@@ -19,15 +19,16 @@ defaults =
   password: process.env.EPIQUERY_PASS ? ""
   retries: process.env.EPIQUERY_RETRIES ? 5
   backoff: process.env.EPIQUERY_BACKOFF ? 5
+  assumeMustache: true
 
-epiquery = module.exports = (path, json={}, options={}) ->
+epiquery = module.exports = (pathOrDefaults, json={}, options={}) ->
   # if the first parameter is an object, its options
-  if typeof path is 'object'
-    defaults = _.defaults defaults, options
+  if typeof pathOrDefaults is 'object'
+    defaults = _.defaults defaults, pathOrDefaults
     debug "defaults now", defaults
     epiquery
   else
-    epiquery.post path, json, options
+    epiquery.post pathOrDefaults, json, options
 
 epiquery.get = (path, params, options) -> request "GET", path, params, options
 
@@ -35,7 +36,9 @@ epiquery.post = (path, json, options) -> request "POST", path, json, options
     
 request = (method, path, json={}, options={}) ->
   options = _.defaults defaults, options
-  path = "#{path}.mustache" if Path.extname(path) is ''
+  console.log options
+  # assume mustache if extension is missing
+  path = "#{path}.mustache" if Path.extname(path) is '' and options.assumeMustache
 
   # trim leading/trailing slashes to match expectations
   path = if path.slice 0 is '/' then path.slice 0 else path
@@ -55,7 +58,7 @@ request = (method, path, json={}, options={}) ->
   , { max_tries: options.retries, backoff: options.backoff }
   .then (response) ->
     if response.statusCode isnt 200
-      debug "Unexpected Epiquery Response: ", response 
+      debug "Unexpected Epiquery Response: ", response.body
       throw new Error "Unexpected HTTP response: #{response.statusCode}"
     debug "Received #{response.body.length} records like these:"
     debug _.first response.body
@@ -69,6 +72,6 @@ epiquery.proxy = (options) ->
       Authorization: "Basic #{new Buffer("#{options.username}:#{options.password}").toString 'base64'}"
   
 epiquery.healthcheck = ->
-  epiquery.get "diagnostic"
+  epiquery "diagnostic", {}, { assumeMustache: false }
   .then (response) ->
     console.log "Connected to #{defaults.server} for Epiquery"
