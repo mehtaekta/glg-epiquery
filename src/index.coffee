@@ -71,8 +71,8 @@ sendRequest = (method, path, json={}, options={}) ->
       debug "Unexpected Epiquery Response: ", response.body
       throw new Error "Unexpected HTTP response: #{response.statusCode}"
     results = if typeof response.body is 'string' then JSON.parse response.body else response.body
-    debug "Received #{results.length} records"
-    debug "First record:", '\n', JSON.stringify(_.first results, null, 2) if results.length isnt 0
+    debug "Received #{results.length} records", if results.length isnt 0 then "First record:" else null
+    debug _.first results if results.length isnt 0
     results
 
 epiquery.proxy = (options) ->
