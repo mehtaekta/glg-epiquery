@@ -57,7 +57,8 @@ sendRequest = (method, path, json={}, options={}) ->
 
   if method is "POST"
     requestOptions.json = json
-    debug "POSTing to #{uri}", json
+    debug "POSTing to #{uri}"
+    debug json
   if method is "GET"
     requestOptions.json = true
     requestOptions.qs = json
