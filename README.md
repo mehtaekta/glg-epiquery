@@ -18,10 +18,12 @@ npm install --save glg/glg-epiquery
 
 Typically you will simply use the `epiquery()` method to POST a template and optional payload to the server. There are also two convenience methods, `epiquery.get()` and `epiquery.post()` if you prefer to be respectful of REST conventions. Each of these takes a template path relative to the epiquery server and an optional JSON object as its second parameter. In the case of `get()` the object is interpreted as a list of query string name/value pairs, rather than JSON payload.
 
+Note that when importing the epiquery library, if you do not pass any configuration options you still need to execute the imported function with no arguments, as shown in the example below.
+
 ### Typical usage (CoffeeScript)
 
 ```coffee-script
-epiquery = require 'glg-epiquery'
+epiquery = require('glg-epiquery')()
 
 epiquery '/glgCurrentUser/getUserByEmail.mustache',
   email: 'dfields@glgroup.com'
@@ -32,7 +34,7 @@ epiquery '/glgCurrentUser/getUserByEmail.mustache',
 ### Typical usage (JavaScript)
 
 ```javascript
-var epiquery = require('glg-epiquery');
+var epiquery = require('glg-epiquery')();
 
 epiquery('/glgCurrentUser/getUserByEmail.mustache', {
   email: 'dfields@glgroup.com'
@@ -94,7 +96,7 @@ Note that currently, the proxy does not support all of the same features. Notabl
 ### Setting up an epiquery proxy (CoffeeScript)
 
 ```coffee-script
-epiquery = require 'glg-epiquery'
+epiquery = require('glg-epiquery')()
 express = require 'express'
 app = express()
 

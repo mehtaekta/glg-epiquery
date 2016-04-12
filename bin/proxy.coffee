@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 
-epiquery = require '../src/index.coffee'
+epiquery = require('../src/index.coffee')()
 colors = require 'colors'
 express = require 'express'
 app = express()
