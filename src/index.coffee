@@ -45,7 +45,7 @@ class EpiqueryClient
   post: (path, json, options) =>
     @sendRequest "POST", path, json, options
 
-  sendRequest: (method, path, json={}, options={}) ->
+  sendRequest: (method, path, json={}, options={}) =>
     options = _.defaults options, @defaults
     # assume mustache if extension is missing
     path = "#{path}.mustache" if Path.extname(path) is '' and options.assumeMustache
@@ -54,9 +54,9 @@ class EpiqueryClient
     path = if path.slice 0 is '/' then path.slice 0 else path
     server = if options.server.slice -1 is '/' then options.server.slice 0, -1 else options.server
     if options.connection?
-      uri = "#{options.server}/#{options.apiKey}/epiquery1/#{options.connection}/#{path}"
+      uri = "#{server}/#{options.apiKey}/epiquery1/#{options.connection}/#{path}"
     else
-      uri = "#{options.server}/#{path}"
+      uri = "#{server}/#{path}"
       
     requestOptions =
       uri: uri
