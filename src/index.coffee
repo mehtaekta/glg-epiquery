@@ -5,7 +5,7 @@ _ = require 'lodash'
 colors = require 'colors'
 debug = require('debug') 'epiquery'
 express = require 'express'
-proxy = require 'express-request-proxy'
+expressRequestProxy = require 'express-request-proxy'
 router = module.exports = express.Router()
 Path = require 'path'
 querystring = require 'querystring'
@@ -91,14 +91,16 @@ class EpiqueryClient
       debug _.first results if results.length isnt 0
       results
 
-  proxy: (options) ->
+  proxy: (options) =>
     options = _.defaults options, @defaults
-    router.all '/*', proxy
+    debug "creating epiquery proxy with options"
+    debug options
+    router.all '/*', expressRequestProxy
       url: "#{options.server}/*"
       headers:
         Authorization: "Basic #{new Buffer("#{options.username}:#{options.password}").toString 'base64'}"
   
-  healthcheck: ->
+  healthcheck: =>
     epiquery "diagnostic", {}, { assumeMustache: false }
     .then (response) ->
       console.log "Successfully connected to #{@defaults.server} for Epiquery".blue
