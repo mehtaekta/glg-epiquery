@@ -18,6 +18,7 @@ module.exports = (defaults={}) ->
   epiquery.get = client.get
   epiquery.post = client.post
   epiquery.proxy = client.proxy
+  epiquery.healthcheck = client.healthcheck
   return epiquery
 
 class EpiqueryClient
@@ -101,7 +102,7 @@ class EpiqueryClient
         Authorization: "Basic #{new Buffer("#{options.username}:#{options.password}").toString 'base64'}"
   
   healthcheck: =>
-    epiquery "diagnostic", {}, { assumeMustache: false }
-    .then (response) ->
+    @get "diagnostic", {}, { assumeMustache: false }
+    .then (response) =>
       console.log "Successfully connected to #{@defaults.server} for Epiquery".blue
       response
