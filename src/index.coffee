@@ -32,6 +32,8 @@ class EpiqueryClient
       retries: process.env.EPIQUERY_RETRIES ? 5
       backoff: process.env.EPIQUERY_BACKOFF ? 5
       assumeMustache: true
+      apiKey: process.env.EPISTREAM_APIKEY ? null
+      connection: process.env.EPISTREAM_CONNECTION ? null
 
     debug "created new Epiquery Client with these defaults"
     debug @defaults
@@ -51,8 +53,11 @@ class EpiqueryClient
     # trim leading/trailing slashes to match expectations
     path = if path.slice 0 is '/' then path.slice 0 else path
     server = if options.server.slice -1 is '/' then options.server.slice 0, -1 else options.server
-    uri = "#{options.server}/#{path}"
-
+    if options.connection?
+      uri = "#{options.server}/#{options.apiKey}/epiquery1/#{options.connection}/#{path}"
+    else
+      uri = "#{options.server}/#{path}"
+      
     requestOptions =
       uri: uri
       auth:

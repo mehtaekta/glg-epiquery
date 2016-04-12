@@ -78,14 +78,16 @@ The `get()` and `post()` methods also accept an options hash as the last argumen
 
 ### Available configuration options
 
-| option   | description     | env variable | default value                 |
-|----------|-----------------|--------------|-------------------------------|
-| server   | server url      | `EPIQUERY_SERVER`  | `http://localhost:7070` |
-| username | server username | `EPIQUERY_USER`    |  none                   |
-| password | server password | `EPIQUERY_PASSWORD`|  none                   |
-| retries  | number of times to retry | `EPIQUERY_RETRIES` | 5 times |
-| backoff  | progressive delay between retries, in seconds | `EPIQUERY_BACKOFF` | 5 seconds |
-| timeout  | request timeout, in seconds | `EPIQUERY_TIMEOUT` | 5 minutes |
+| option    | description     | env variable | default value                 |
+|---------- |-----------------|--------------|-------------------------------|
+| server    | server url      | `EPIQUERY_SERVER`  | `http://localhost:7070` |
+| username  | server username | `EPIQUERY_USER`    |  none                   |
+| password  | server password | `EPIQUERY_PASSWORD`|  none                   |
+| retries   | number of times to retry | `EPIQUERY_RETRIES` | 5 times |
+| backoff   | progressive delay between retries, in seconds | `EPIQUERY_BACKOFF` | 5 seconds |
+| timeout   | request timeout, in seconds | `EPIQUERY_TIMEOUT` | 5 minutes |
+| connection| epiquery2 connection | EPISTREAM_CONNECTION | none |
+| apiKey    | epiquery2 apiKey | EPISTREAM_APIKEY | none |
 
 ## Proxy service middleware
 
@@ -114,6 +116,16 @@ var app = express();
 
 app.use('/epiquery', epiquery.proxy());
 app.listen(8080);
+```
+
+## Epistream / Epiquery 2
+
+You can make connections to an epiquery2 server by configuring the client with the `connection` and `apiKey` properties. This will use the non streaming interface and will convert all the records for you. There are also environment variables for each of these.
+
+```coffeescript
+datahub = require('glg-epiquery')
+  server: process.env.EPISTREAM_SERVER
+  connection: 'datahub'
 ```
 
 ## Epiquery from the command line
