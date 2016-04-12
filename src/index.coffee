@@ -10,8 +10,8 @@ router = module.exports = express.Router()
 Path = require 'path'
 querystring = require 'querystring'
 
-module.exports = (options={}) ->
-  client = new EpiqueryClient options
+module.exports = (defaults={}) ->
+  client = new EpiqueryClient defaults
   
   epiquery = (path, args, options) ->
     client.post path, args, options
@@ -52,7 +52,9 @@ class EpiqueryClient
 
     # trim leading/trailing slashes to match expectations
     path = if path.slice 0 is '/' then path.slice 0 else path
-    server = if options.server.slice -1 is '/' then options.server.slice 0, -1 else options.server
+    server = options.server
+    # this below here don't work
+    # if options.server.slice -1 is '/' then options.server.slice 0, -1 else options.server
     if options.connection?
       uri = "#{server}/#{options.apiKey}/epiquery1/#{options.connection}/#{path}"
     else
