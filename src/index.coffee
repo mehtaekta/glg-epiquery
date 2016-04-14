@@ -86,7 +86,7 @@ class EpiqueryClient
     .then (response) ->
       if response.statusCode isnt 200
         debug "Unexpected Epiquery Response: ", response.body
-        throw new Error "Unexpected HTTP response: #{response.statusCode}"
+        throw new Error "Unexpected HTTP response at #{requestOptions.uri}: #{response.statusCode}"
       results = if typeof response.body is 'string' then JSON.parse response.body else response.body
       debug "Received #{results.length} records", if results.length isnt 0 then "First record:" else ""
       debug _.first results if results.length isnt 0
