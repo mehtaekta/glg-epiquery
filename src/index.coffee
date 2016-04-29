@@ -98,6 +98,7 @@ class EpiqueryClient
     debug options
     router.all '/*', expressRequestProxy
       url: "#{options.server}/*"
+      timeout: options.timeout
       headers:
         Authorization: "Basic #{new Buffer("#{options.username}:#{options.password}").toString 'base64'}"
   
