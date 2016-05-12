@@ -12,7 +12,7 @@ querystring = require 'querystring'
 
 module.exports = (defaults={}) ->
   client = new EpiqueryClient defaults
-  
+
   epiquery = (path, args, options) ->
     client.post path, args, options
   epiquery.get = client.get
@@ -24,7 +24,7 @@ module.exports = (defaults={}) ->
 class EpiqueryClient
   constructor: (options={}) ->
     return new EpiqueryClient options unless this instanceof EpiqueryClient
-    
+
     @defaults = _.defaults options,
       timeout: process.env.EPIQUERY_TIMEOUT ? 1000 * 60 * 5
       server: process.env.EPIQUERY_SERVER ? "http://localhost:7070"
@@ -39,10 +39,10 @@ class EpiqueryClient
     debug "created new Epiquery Client with these defaults"
     debug @defaults
     console.log "Using #{@defaults.server} for epiquery".blue
-    
+
   get: (path, params, options) =>
     @sendRequest "GET", path, params, options
-  
+
   post: (path, json, options) =>
     @sendRequest "POST", path, json, options
 
@@ -57,10 +57,12 @@ class EpiqueryClient
     # this below here don't work
     # if options.server.slice -1 is '/' then options.server.slice 0, -1 else options.server
     if options.connection?
-      uri = "#{server}/#{options.apiKey}/epiquery1/#{options.connection}/#{path}"
+      uri = "#{server}/"
+      if options.apiKey? then uri += "#{options.apiKey}/"
+      uri += "epiquery1/#{options.connection}/#{path}"
     else
       uri = "#{server}/#{path}"
-      
+
     requestOptions =
       uri: uri
       auth:
@@ -101,7 +103,7 @@ class EpiqueryClient
       timeout: options.timeout
       headers:
         Authorization: "Basic #{new Buffer("#{options.username}:#{options.password}").toString 'base64'}"
-  
+
   healthcheck: =>
     @get "diagnostic", {}, { assumeMustache: false }
     .then (response) =>
