@@ -18,7 +18,8 @@
     "express-request-proxy": "2.0.0",
     "lodash": "4.6.1",
     "minimist": "1.2.0",
-    "request": "2.69.0"
+    "request": "2.69.0",
+    "underscore.string": "^3.3.4"
   },
   "bin": {
     "epiquery": "bin/epiquery.coffee",
