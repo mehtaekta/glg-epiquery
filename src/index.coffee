@@ -9,6 +9,7 @@ expressRequestProxy = require 'express-request-proxy'
 router = module.exports = express.Router()
 Path = require 'path'
 querystring = require 'querystring'
+_.str = require 'underscore.string'
 
 module.exports = (defaults={}) ->
   client = new EpiqueryClient defaults
@@ -20,6 +21,21 @@ module.exports = (defaults={}) ->
   epiquery.proxy = client.proxy
   epiquery.healthcheck = client.healthcheck
   return epiquery
+
+camelize = (row) ->
+  _.reduce(row, (acc, v, k) ->
+    key = _.str.camelize(k.toLowerCase())
+    acc[key] = v;
+    acc
+  , {})
+
+camelizeAll = (obj) ->
+  if _.isPlainObject(obj)
+    camelize(obj)
+  else if _.isArray(obj)
+    return _.each obj, (row, i, k) -> obj[i] = camelizeAll(row)
+  else
+    return obj
 
 class EpiqueryClient
   constructor: (options={}) ->
@@ -92,6 +108,7 @@ class EpiqueryClient
         bodytext = if typeof response.body is 'object' then JSON.stringify response.body else response.body
         throw new Error "Unexpected HTTP response at #{requestOptions.uri}: #{response.statusCode}, #{bodytext}"
       results = if typeof response.body is 'string' then JSON.parse response.body else response.body
+      results = camelizeAll(results) if json.camelizeResults
       debug "Received #{results.length} records", if results.length isnt 0 then "First record:" else ""
       debug _.first results if results.length isnt 0
       results
