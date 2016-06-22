@@ -109,8 +109,10 @@ class EpiqueryClient
         throw new Error "Unexpected HTTP response at #{requestOptions.uri}: #{response.statusCode}, #{bodytext}"
       results = if typeof response.body is 'string' then JSON.parse response.body else response.body
       results = camelizeAll(results) if json.camelizeResults
-      debug "Received #{results.length} records", if results.length isnt 0 then "First record:" else ""
-      debug _.first results if results.length isnt 0
+      # It's possible for results to be undefined under epiquery2 if no results are returned,
+      # so be sure to soak it here.
+      debug "Received #{results?.length} records", if results?.length isnt 0 then "First record:" else ""
+      debug _.first results if results?.length isnt 0
       results
 
   proxy: (options) =>
