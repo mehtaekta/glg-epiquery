@@ -67,15 +67,17 @@ class EpiqueryClient
     # assume mustache if extension is missing
     path = "#{path}.mustache" if Path.extname(path) is '' and options.assumeMustache
 
-    # trim leading/trailing slashes to match expectations
-    path = if path.slice 0 is '/' then path.slice 0 else path
-    server = options.server
-    # this below here don't work
-    # if options.server.slice -1 is '/' then options.server.slice 0, -1 else options.server
+    # trim leading slash from path if present
+    path = if path.slice(0, 1) is '/' then path.slice(1) else path
+    
+    # trim trailing slash from server URL if present
+    server = if options.server.slice(-1) is '/' then options.server.slice(0, -1) else options.server
+
+    # handle epiquery2
     if options.connection?
-      uri = "#{server}/"
-      if options.apiKey? then uri += "#{options.apiKey}/"
-      uri += "epiquery1/#{options.connection}/#{path}"
+      uri = "#{server}"
+      uri += "/#{options.apiKey}" if options.apiKey?
+      uri += "/epiquery1/#{options.connection}/#{path}"
     else
       uri = "#{server}/#{path}"
 
