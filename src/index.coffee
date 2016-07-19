@@ -91,6 +91,12 @@ class EpiqueryClient
       json: json
       gzip: true
 
+  jwtToken = document.cookie.split('jwt=')[1].split(';')[0]
+  if jwtToken?
+      requestOptions.headers = 
+        Authorization: 
+          bearer: jwtToken
+
     if method is "POST"
       requestOptions.json = json
       debug "POSTing to #{uri}"
